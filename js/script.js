@@ -1,7 +1,14 @@
 
+/// Editor Note ... I didn't realize the array.filter() method existed. 
+//              ... This is my convoluted way of evading that method — LOL.
+//          AND ... I'm proud of my convoluted method. 
+//              ... Otherwise, I realize, filtering the student list before populating the page is better than
+//              ... populating the page as the filtering occurs. 
+//              ... At least, the former seems more 'modular'. 
+//              ... Oh well. Either works. Enjoy. And, thanks for reading. 
 
 ///////////// Global Variables //////////////////
-const searchBar = genSearchBar(); // hoisted from below
+const searchBar = genSearchBar(); 
 let searchValue = searchBar.value; 
 const buttonList = document.querySelector('.link-list');
 let aBtn = 1; // as in Active Button; matches button's innerText, not index
@@ -14,7 +21,7 @@ const students = data;
  *          - genItem(i, studentName)
  *          - genButton(i)
  *          - genNoResults()
- *          - genChild(parent, child, property, value,...)
+ *          - genChild(parent, child, property, value,...) // This 'gens' the other things haha
  * *********************************************
  **********************************************/
 
@@ -46,6 +53,8 @@ function genNoResults() {
   genChild('.student-list', 'h3', 'innerText', 'No results found :(', 'className', 'no-results');
 }
 
+// insertAdjacentHTML would have been faster ... but I'm also proud of my genChild Method. 
+// Sometimes pride is a dangerous thing. 
 function genChild(parent, child, prop1, val1, prop2, val2, prop3, val3) {
   const childElement = document.createElement(child);
   const parentElement = document.querySelector(parent);
@@ -63,9 +72,9 @@ function genChild(parent, child, prop1, val1, prop2, val2, prop3, val3) {
 
 /**********************************************
  * *********************************************
- * STEP 1: Functions which POPULATE (pop) the Generated Components  
+ * STEP 1: Functions which POPULATE (pop) the Generated Components above
  *          - popPage();
- *          - popButtons(population);
+ *          - popButtons(filtered);
  * *********************************************
  **********************************************/
 
@@ -80,14 +89,20 @@ function popPage() {
       filtered += 1; // item is considered filtered
     }
     if (testName.includes(searchValue.toLowerCase())) { // if name === search bar value
-      if ( (i - filtered) < (aBtn * 9) && (Math.abs(i-filtered)) >= ((aBtn -1) * 9) ) { // guarantees only 9 items are ever printed
+      // I bet you can't guess how the next "If Statement" works – [upsidedown smiley face]. 
+      // Let's use an example...  "Greg @ index: 40" && "Active Button @ aBtn: 1" && "Filtered Items: 39"
+      // so if ((Greg:40) - (39 filtered items)), Greg now = index 1
+      // Greg:1 < (aBtn:1 * 9) && Greg:1 > (aBtn:0 * 9) === True. Greg appears on page 1, when 39 items are filtered.
+      // if filtered = 0 ... Greg:40 < btn:9 === false, and greg would not be displayed, 
+      // if aBtn = 4 ... Greg:40 < aBtn 4*9 && Greg:40 > aBtn(4-1)*9 === True, Greg is displayed when aBtn = 4; 
+      // if you don't follow, no worries. This is why I cite my code as 'convoluted' 
+      if ( (i - filtered) < (aBtn * 9) && (Math.abs(i-filtered)) >= ((aBtn -1) * 9) ) { // guarantees only 9 items are printed
         genItem(i, studentName);
       } 
     }
   }
-  if (filtered+1 > students.length) {
+  if (filtered+1 > students.length) { // this is what generates the no results message 
     genNoResults();
-    popButtons(filtered);
   } 
   popButtons(filtered);
 }
@@ -129,4 +144,4 @@ buttonList.addEventListener('click', (e) => {
  *          - popPage();
  * *********************************************
  **********************************************/
-popPage();
+popPage(); // loads the page initially ... the event listeners do the rest 
