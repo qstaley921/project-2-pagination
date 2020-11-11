@@ -82,14 +82,14 @@ function popPage() {
   const pageListElement = document.querySelector('.student-list');
   let filtered = 0 // where nothing starts filtered because the search bar is empty
   pageListElement.innerHTML = ''; // resets the page
-  for (let i = 0; i < students.length; i++) {
+  for (let i = 0; i < students.length; i++) { // for number of students
     let studentName = `${students[i].name.first} ${students[i].name.last}`;
     let testName = studentName.toLowerCase();
     if (testName.includes(searchValue.toLowerCase()) === false) { // if name != search bar value
       filtered += 1; // item is considered filtered
     }
     if (testName.includes(searchValue.toLowerCase())) { // if name === search bar value
-      // I bet you can't guess how the next "If Statement" works – [upsidedown smiley face]. 
+      // I bet you can't guess how the next "If Statement" works – [upsidedown smiley face] 
       // Let's use an example...  "Greg @ index: 40" && "Active Button @ aBtn: 1" && "Filtered Items: 39"
       // so if ((Greg:40) - (39 filtered items)), Greg now = index 1
       // Greg:1 < (aBtn:1 * 9) && Greg:1 > (aBtn:0 * 9) === True. Greg appears on page 1, when 39 items are filtered.
@@ -104,7 +104,8 @@ function popPage() {
   if (filtered+1 > students.length) { // this is what generates the no results message 
     genNoResults();
   } 
-  popButtons(filtered);
+  popButtons(filtered); // populates the buttons based on filter results. 
+                        // So if 42 - 20 students are filtered, buttons are made for just 22 items
 }
 
 function popButtons(filtered) {
